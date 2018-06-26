@@ -1,7 +1,6 @@
 --! file: player.lua
 
 local screenWidth, screenHeight = love.graphics.getDimensions()
-local playerStep = 5
 
 Player = Object:extend()
 
@@ -13,92 +12,92 @@ function Player:new()
     self.weaponList = {}
     self.width = 40
     self.height = 40
+    self.speed = 300
     self.direction = 'south' --! north, northeast, east, southest, south, southwest, west, northwest
+    self.body = love.physics.newBody(world, 400,200, "dynamic")  -- set x,y position (400,200) and let it move and hit other objects ("dynamic")
+    self.s = love.physics.newRectangleShape(self.width, self.height)                  -- give it a radius of 50
+    self.f = love.physics.newFixture(self.body, self.s)          -- connect body to shape
+    self.body:setFixedRotation(true)
+    self.f:setUserData("Player") 
 end
 
 
 function Player:update(dt)
-    local newX = self.x
-    local newY = self.y
+    local newX = self.body:getX()
+    local newY = self.body:getY()
 
     if love.keyboard.isDown('right') and love.keyboard.isDown('up') then
         self.direction = 'northeast'
-        newX = self.x + playerStep
-        newY = self.y - playerStep
+        self.body:setLinearVelocity(self.speed, -self.speed)
     elseif love.keyboard.isDown('right') and love.keyboard.isDown('down') then
         self.direction = 'southeast'
-        newX = self.x + playerStep
-        newY = self.y + playerStep
+        self.body:setLinearVelocity(self.speed, self.speed)
     elseif love.keyboard.isDown('left') and love.keyboard.isDown('up') then
         self.direction = 'northwest'
-        newX = self.x - playerStep
-        newY = self.y - playerStep
+        self.body:setLinearVelocity(-self.speed, -self.speed)
     elseif love.keyboard.isDown('left') and love.keyboard.isDown('down') then
         self.direction = 'southwest'
-        newX = self.x - playerStep
-        newY = self.y + playerStep
+        self.body:setLinearVelocity(-self.speed, self.speed)
     elseif love.keyboard.isDown('right') then
         self.direction = 'east'
-        newX = self.x + playerStep
-        newY = self.y
+        self.body:setLinearVelocity(self.speed, 0)
     elseif love.keyboard.isDown('left') then
         self.direction = 'west'
-        newX = self.x - playerStep
-        newY = self.y
+        self.body:setLinearVelocity(-self.speed, 0)
     elseif love.keyboard.isDown('up') then
         self.direction = 'north'
-        newX = self.x
-        newY = self.y - playerStep
+        self.body:setLinearVelocity(0, -self.speed)
     elseif love.keyboard.isDown('down') then
         self.direction = 'south'
-        newX = self.x
-        newY = self.y + playerStep
+        self.body:setLinearVelocity(0, self.speed)
     end
+end
 
-    if xPositionIsValid(newX, self.width) then
-        self.x = newX
-    end
-    if yPositionIsValid(newY, self.height) then
-        self.y = newY
+function Player:keyreleased(key)
+    if key == 'left' or key == 'right' or key == 'down' or key == 'up' then
+        self.body:setLinearVelocity(0,0)
     end
 end
 
 
 function Player:draw()
-    love.graphics.setColor(0, 105, 255, 255)
-    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+    love.graphics.setColor(9, 184, 171, 255)
+    love.graphics.polygon("fill", p1.body:getWorldPoints(p1.s:getPoints()))
 
-    --! draw the front of the player in the right direction
-    local xx = 0
-    local yy = 0
-    local size = 10
-    if self.direction == 'north' then
-        xx = self.x + (self.width/2) - size/2
-        yy = self.y
-    elseif self.direction == 'south' then
-        xx = self.x + (self.width/2) - size/2
-        yy = self.y + self.height - size
-    elseif self.direction == 'east' then
-        xx = self.x + self.width - size
-        yy = self.y + self.height/2 - size/2
-    elseif self.direction == 'west' then
-        xx = self.x
-        yy = self.y + self.height/2 - size/2
-    elseif self.direction == 'northeast' then
-        xx = self.x + self.width - size
-        yy = self.y
-    elseif self.direction == 'northwest' then
-        xx = self.x
-        yy = self.y
-    elseif self.direction == 'southeast' then
-        xx = self.x + self.width - size
-        yy = self.y + self.height - size
-    elseif self.direction == 'southwest' then
-        xx = self.x
-        yy = self.y + self.height - size
-    end
-    love.graphics.setColor(50, 0, 0, 255)
-    love.graphics.rectangle("fill", xx, yy, size, size)
+    -- love.graphics.setColor(0, 105, 255, 255)
+    -- love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+
+    -- --! draw the front of the player in the right direction
+    -- local xx = 0
+    -- local yy = 0
+    -- local size = 10
+    -- if self.direction == 'north' then
+    --     xx = self.x + (self.width/2) - size/2
+    --     yy = self.y
+    -- elseif self.direction == 'south' then
+    --     xx = self.x + (self.width/2) - size/2
+    --     yy = self.y + self.height - size
+    -- elseif self.direction == 'east' then
+    --     xx = self.x + self.width - size
+    --     yy = self.y + self.height/2 - size/2
+    -- elseif self.direction == 'west' then
+    --     xx = self.x
+    --     yy = self.y + self.height/2 - size/2
+    -- elseif self.direction == 'northeast' then
+    --     xx = self.x + self.width - size
+    --     yy = self.y
+    -- elseif self.direction == 'northwest' then
+    --     xx = self.x
+    --     yy = self.y
+    -- elseif self.direction == 'southeast' then
+    --     xx = self.x + self.width - size
+    --     yy = self.y + self.height - size
+    -- elseif self.direction == 'southwest' then
+    --     xx = self.x
+    --     yy = self.y + self.height - size
+    -- end
+    -- love.graphics.setColor(50, 0, 0, 255)
+    -- love.graphics.rectangle("fill", xx, yy, size, size)
 end
 
 function Player:getDirection()
