@@ -8,6 +8,7 @@ Player = Object:extend()
 
 function Player:new()
     self.bullet = {}
+    self.bulletCount = 0
     self.state = "normal"
     self.lastShot = love.timer.getTime( )
     self.x = 100
@@ -61,10 +62,11 @@ function Player:update(dt)
     
     if love.keyboard.isDown('space') then
         if love.timer.getTime( ) - self.lastShot > 0.1 then
-            print ("SHOOT!")
             self.lastShot = love.timer.getTime()
-            b = Bullet(self.body:getX(), self.body:getY(), self.direction)
-            table.insert(self.bullet, b)
+            local b = Bullet(self.body:getX(), self.body:getY(), self.direction)
+            self.bulletCount = self.bulletCount + 1
+            b.f:setUserData("bullet"..self.bulletCount)
+            self.bullet["bullet"..self.bulletCount] = b
         end
     end
 end
@@ -79,12 +81,11 @@ end
 function Player:draw()
     love.graphics.setColor(9, 184, 171, 255)
     love.graphics.polygon("fill", p1.body:getWorldPoints(p1.s:getPoints()))
-
-    if #self.bullet > 0 then
-        for i, b in ipairs(self.bullet) do 
-            b:draw()
-        end
+    
+    for i, b in pairs(self.bullet) do 
+        b:draw()
     end
+
     -- love.graphics.setColor(0, 105, 255, 255)
     -- love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
 

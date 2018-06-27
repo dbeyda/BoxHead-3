@@ -6,6 +6,8 @@ function love.load()
 
     local screenWidth, screenHeight = love.graphics.getDimensions()
 
+    bulletsToDestroy = {}
+
     world = love.physics.newWorld(0, 0, true)  --Gravity is being set to 0 in the x direction and 200 in the y direction.
     world:setCallbacks(beginContact, endContact, preSolve, postSolve)
 
@@ -16,10 +18,10 @@ function love.load()
     persisting = 0
 end
 
-
 function love.update(dt)
     world:update(dt)
     p1:update(dt)
+    destroyBulletsNodes()
 end
 
 
@@ -32,6 +34,12 @@ function love.keyreleased(key)
     p1:keyreleased(key)
 end
 
+function destroyBulletsNodes()
+    for b in pairs(bulletsToDestroy) do
+        bulletsToDestroy[b] = nil
+        p1.bullet[b] = nil
+    end
+end
 
 -- collision functions --
 
@@ -39,6 +47,12 @@ function beginContact(a, b, coll)
     x,y = coll:getNormal()
     text = text.."\n"..a:getUserData().." colliding with "..b:getUserData().." with a vector normal of: "..x..", "..y
     -- print(text)
+
+    if (a:getCategory() == 3 and b:getCategory() == 2) then
+        bulletsToDestroy[b:getUserData()] = true
+    elseif (a:getCategory() == 2 and b:getCategory() == 3) then
+        bulletsToDestroy[a:getUserData()] = true
+    end
 end
  
 function endContact(a, b, coll)

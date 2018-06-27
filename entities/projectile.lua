@@ -8,7 +8,7 @@ function Bullet:new(x, y, direction)
     self.s = love.physics.newRectangleShape(5, 5)
     self.f = love.physics.newFixture(self.body, self.s)          -- connect body to shape
     self.body:setFixedRotation(true)
-    self.f:setUserData("Bullet") 
+    -- self.f:setUserData("Bullet") 
     self.f:setCategory(2)
     self.f:setMask(1,2)
 
