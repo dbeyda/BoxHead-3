@@ -11,24 +11,30 @@ function Walls:new()
     leftWall.s = love.physics.newRectangleShape(20, screenHeight)
     leftWall.f = love.physics.newFixture(leftWall.b, leftWall.s)
     leftWall.f:setUserData("leftWall")
+    leftWall.f:setCategory(3)
 
     rightWall = {}
     rightWall.b = love.physics.newBody(world, screenWidth - 10, screenHeight / 2, "static")
     rightWall.s = love.physics.newRectangleShape(20, screenHeight)
     rightWall.f = love.physics.newFixture(rightWall.b, rightWall.s)
     rightWall.f:setUserData("rightWall")
+    rightWall.f:setCategory(3)
 
     topWall = {}
     topWall.b = love.physics.newBody(world, screenWidth /2, 10, "static")
     topWall.s = love.physics.newRectangleShape(screenWidth - 20, 20)
     topWall.f = love.physics.newFixture(topWall.b, topWall.s)
     topWall.f:setUserData("topWall")
+    topWall.f:setCategory(3)
 
     bottomWall = {}
     bottomWall.b = love.physics.newBody(world, screenWidth /2, screenHeight - 10, "static")
     bottomWall.s = love.physics.newRectangleShape(screenWidth - 20, 20)
     bottomWall.f = love.physics.newFixture(bottomWall.b, bottomWall.s)
     bottomWall.f:setUserData("bottomWall")
+    bottomWall.f:setCategory(3)
+
+
 
 end
 

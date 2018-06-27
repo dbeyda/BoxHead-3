@@ -1,56 +1,38 @@
 --! file: projectile.lua
 
-local bulletStep = 15
+Bullet = Object:extend()
 
+function Bullet:new(x, y, direction)
+    self.speed = 800
+    self.body = love.physics.newBody(world, x, y, "dynamic")
+    self.s = love.physics.newRectangleShape(5, 5)
+    self.f = love.physics.newFixture(self.body, self.s)          -- connect body to shape
+    self.body:setFixedRotation(true)
+    self.f:setUserData("Bullet") 
+    self.f:setCategory(2)
+    self.f:setMask(1,2)
 
-function Player:update(dt)
-    if love.keyboard.isDown('right', 'up') then
-        self.direction = 'northeast'
-        local new_x = self.x + playerStep
-        if new_x >= 0 and new_x <= screenWidth-self.width then
-            self.x = new_x
-        end
-    elseif love.keyboard.isDown('right', 'down') then
-        self.direction = 'southeast'
-        local new_x = self.x - playerStep
-        if new_x >= 0 and new_x <= screenWidth then
-            self.x = new_x
-        end
-    elseif love.keyboard.isDown('left', 'up') then
-        self.direction = 'northwest'
-        local new_y = self.y - playerStep
-        if new_y >= 0 and new_y <= screenHeight then
-            self.y = new_y
-        end
-    elseif love.keyboard.isDown('left', 'down') then
-        self.direction = 'southwest'
-        local new_y = self.y + playerStep
-        if new_y >= 0 and new_y <= screenHeight-self.height then
-            self.y = new_y
-        end
-    elseif love.keyboard.isDown('right') then
-        self.direction = 'east'
-        local newX = self.x + playerStep
-        if positionIsValid(newX, self.y, self.width, self.height) then
-            self.x = new_x
-        end
-    elseif love.keyboard.isDown('left') then
-        self.direction = 'west'
-        local newX = self.x - playerStep
-        if positionIsValid(newX, self.y, self.width, self.height) then
-            self.x = new_x
-        end
-    elseif love.keyboard.isDown('up') then
-        self.direction = 'north'
-        local newY = self.y - playerStep
-        if positionIsValid(self.x, newY, self.width, self.height) then
-            self.y = new_y
-        end
-    elseif love.keyboard.isDown('down') then
-        self.direction = 'south'
-        local newY = self.y + playerStep
-        if positionIsValid(self.x, newY, self.width, self.height) then
-            self.y = new_y
-        end
+    if direction == "north" then
+        self.body:setLinearVelocity(0, -self.speed)
+    elseif direction == "east" then
+        self.body:setLinearVelocity(self.speed, 0)
+    elseif direction == "south" then
+        self.body:setLinearVelocity(0, self.speed)
+    elseif direction == "west" then
+        self.body:setLinearVelocity(-self.speed, 0)
+    elseif direction == 'northeast' then
+        self.body:setLinearVelocity(self.speed, -self.speed)
+    elseif direction == 'southeast' then
+        self.body:setLinearVelocity(self.speed, self.speed)
+    elseif direction == 'northwest' then
+        self.body:setLinearVelocity(-self.speed, -self.speed)
+    elseif direction == 'southwest' then
+        self.body:setLinearVelocity(-self.speed, self.speed)
     end
 end
+
+function Bullet:draw()
+    love.graphics.setColor(255, 255, 255, 255)
+    love.graphics.polygon("fill", self.body:getWorldPoints(self.s:getPoints()))
+end
+    

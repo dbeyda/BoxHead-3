@@ -1,10 +1,15 @@
 --! file: player.lua
 
+require "entities.projectile"
+
 local screenWidth, screenHeight = love.graphics.getDimensions()
 
 Player = Object:extend()
 
 function Player:new()
+    self.bullet = {}
+    self.state = "normal"
+    self.lastShot = love.timer.getTime( )
     self.x = 100
     self.y = 100
     self.health = 100
@@ -15,10 +20,12 @@ function Player:new()
     self.speed = 300
     self.direction = 'south' --! north, northeast, east, southest, south, southwest, west, northwest
     self.body = love.physics.newBody(world, 400,200, "dynamic")  -- set x,y position (400,200) and let it move and hit other objects ("dynamic")
-    self.s = love.physics.newRectangleShape(self.width, self.height)                  -- give it a radius of 50
+    self.s = love.physics.newRectangleShape(self.width, self.height)
     self.f = love.physics.newFixture(self.body, self.s)          -- connect body to shape
     self.body:setFixedRotation(true)
     self.f:setUserData("Player") 
+    self.f:setCategory(1)
+    self.f:setMask(1,2)
 end
 
 
@@ -51,6 +58,15 @@ function Player:update(dt)
         self.direction = 'south'
         self.body:setLinearVelocity(0, self.speed)
     end
+    
+    if love.keyboard.isDown('space') then
+        if love.timer.getTime( ) - self.lastShot > 0.1 then
+            print ("SHOOT!")
+            self.lastShot = love.timer.getTime()
+            b = Bullet(self.body:getX(), self.body:getY(), self.direction)
+            table.insert(self.bullet, b)
+        end
+    end
 end
 
 function Player:keyreleased(key)
@@ -64,6 +80,11 @@ function Player:draw()
     love.graphics.setColor(9, 184, 171, 255)
     love.graphics.polygon("fill", p1.body:getWorldPoints(p1.s:getPoints()))
 
+    if #self.bullet > 0 then
+        for i, b in ipairs(self.bullet) do 
+            b:draw()
+        end
+    end
     -- love.graphics.setColor(0, 105, 255, 255)
     -- love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
 
