@@ -1,5 +1,6 @@
 --! file: projectile.lua
 
+require "entities.constants"
 Bullet = Object:extend()
 
 function Bullet:new(x, y, direction)
@@ -10,8 +11,8 @@ function Bullet:new(x, y, direction)
     self.s = love.physics.newRectangleShape(5, 5)
     self.f = love.physics.newFixture(self.body, self.s)          -- connect body to shape
     self.body:setFixedRotation(true)
-    self.f:setCategory(2)
-    self.f:setMask(1,2)
+    self.f:setCategory(BULLET_CATEGORY)
+    self.f:setMask(PLAYER_CATEGORY, BULLET_CATEGORY)
 
     if direction == "north" then
         self.body:setLinearVelocity(0, -self.speed)

@@ -1,5 +1,6 @@
 --! file: player.lua
 
+require "entities.constants"
 require "entities.projectile"
 
 Player = Object:extend()
@@ -20,8 +21,8 @@ function Player:new()
     self.f = love.physics.newFixture(self.body, self.s)          -- connect body to shape
     self.body:setFixedRotation(true)
     self.f:setUserData("Player") 
-    self.f:setCategory(1)
-    self.f:setMask(1,2)
+    self.f:setCategory(PLAYER_CATEGORY)
+    self.f:setMask(PLAYER_CATEGORY, BULLET_CATEGORY)
 end
 
 

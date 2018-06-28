@@ -1,4 +1,5 @@
 --! file: zombie.lua
+require "entities.constants"
 Zombie = Object:extend()
 
 function Zombie:new(x, y)
@@ -10,8 +11,8 @@ function Zombie:new(x, y)
     self.f = love.physics.newFixture(self.body, self.s)          -- connect body to shape
     self.body:setFixedRotation(true)
     self.f:setUserData("Player") 
-    self.f:setCategory(4)
-    self.f:setMask(4)
+    self.f:setCategory(ZOMBIE_CATEGORY)
+    self.f:setMask(ZOMBIE_CATEGORY)
 end
 
 function Zombie:draw()
