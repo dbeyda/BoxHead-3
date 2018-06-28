@@ -2,17 +2,12 @@
 
 require "entities.projectile"
 
-local screenWidth, screenHeight = love.graphics.getDimensions()
-
 Player = Object:extend()
 
 function Player:new()
     self.bullet = {}
     self.bulletCount = 0
-    self.state = "normal"
     self.lastShot = love.timer.getTime( )
-    self.x = 100
-    self.y = 100
     self.health = 100
     self.currentWeapon = 0
     self.weaponList = {}
@@ -31,9 +26,6 @@ end
 
 
 function Player:update(dt)
-    local newX = self.body:getX()
-    local newY = self.body:getY()
-
     if love.keyboard.isDown('right') and love.keyboard.isDown('up') then
         self.direction = 'northeast'
         self.body:setLinearVelocity(self.speed, -self.speed)
@@ -80,7 +72,7 @@ end
 
 function Player:draw()
     love.graphics.setColor(9, 184, 171, 255)
-    love.graphics.polygon("fill", p1.body:getWorldPoints(p1.s:getPoints()))
+    love.graphics.polygon("fill", self.body:getWorldPoints(self.s:getPoints()))
     
     for i, b in pairs(self.bullet) do 
         b:draw()
@@ -130,18 +122,9 @@ function Player:getWeapon()
     return self.currentWeapon
 end
 
-function xPositionIsValid(x, width)
-    local screenWidth, screenHeight = love.graphics.getDimensions()
-    if x >= 0 and x <= screenWidth-width then
-        return true
+function Player:removeBullet(b)
+    if self.bullet[b] ~= nil then 
+        self.bullet[b].f:destroy()
+        self.bullet[b] = nil
     end
-    return False
-end
-
-function yPositionIsValid(y, height)
-    local screenWidth, screenHeight = love.graphics.getDimensions()
-    if y >= 0 and y <= screenHeight-height then
-        return true
-    end
-    return False
 end
