@@ -1,7 +1,7 @@
 
 function love.load()
     Object = require 'lib.classic'
-    require "entities.constants"
+    Config = require "entities.config"
     require "entities.player"
     require "entities.walls"
     require "entities.zombie"
@@ -16,8 +16,8 @@ function love.load()
 
     zombies = {}
     zombiesCount = 0
-    zombieInterval = 1.5
     lastTimeZombie = 0
+    zombieInterval = Config.ZOMBIE_INTERVAL
 
     for i = 0,10 do
         addZombie()
@@ -72,17 +72,17 @@ function beginContact(a, b, coll)
     x,y = coll:getNormal()
 
     -- Bullet x Wall collision handling
-    if (a:getCategory() == WALL_CATEGORY and b:getCategory() == BULLET_CATEGORY) then
+    if (a:getCategory() == Config.WALL_CATEGORY and b:getCategory() == Config.BULLET_CATEGORY) then
         p1:removeBullet(b:getUserData())
-    elseif (a:getCategory() == BULLET_CATEGORY and b:getCategory() == WALL_CATEGORY) then
+    elseif (a:getCategory() == Config.BULLET_CATEGORY and b:getCategory() == Config.WALL_CATEGORY) then
         p1:removeBullet(a:getUserData())
     end
 
     -- Bullet x Zombie collision handling
-    if (a:getCategory() == ZOMBIE_CATEGORY and b:getCategory() == BULLET_CATEGORY) then
+    if (a:getCategory() == Config.ZOMBIE_CATEGORY and b:getCategory() == Config.BULLET_CATEGORY) then
         killZombie(a:getUserData())
         p1:removeBullet(b:getUserData())
-    elseif (a:getCategory() == BULLET_CATEGORY and b:getCategory() == ZOMBIE_CATEGORY) then
+    elseif (a:getCategory() == Config.BULLET_CATEGORY and b:getCategory() == Config.ZOMBIE_CATEGORY) then
         killZombie(b:getUserData())
         p1:removeBullet(a:getUserData())
     end

@@ -1,6 +1,6 @@
 --! file: walls.lua
 
-require "entities.constants"
+Config = require "entities.config"
 Walls = Object:extend()
 
 function Walls:new()
@@ -12,28 +12,28 @@ function Walls:new()
     leftWall.s = love.physics.newRectangleShape(20, screenHeight)
     leftWall.f = love.physics.newFixture(leftWall.b, leftWall.s)
     leftWall.f:setUserData("wall")
-    leftWall.f:setCategory(WALL_CATEGORY)
+    leftWall.f:setCategory(Config.WALL_CATEGORY)
 
     rightWall = {}
     rightWall.b = love.physics.newBody(world, screenWidth - 10, screenHeight / 2, "static")
     rightWall.s = love.physics.newRectangleShape(20, screenHeight)
     rightWall.f = love.physics.newFixture(rightWall.b, rightWall.s)
     rightWall.f:setUserData("wall")
-    rightWall.f:setCategory(WALL_CATEGORY)
+    rightWall.f:setCategory(Config.WALL_CATEGORY)
 
     topWall = {}
     topWall.b = love.physics.newBody(world, screenWidth /2, 10, "static")
     topWall.s = love.physics.newRectangleShape(screenWidth - 20, 20)
     topWall.f = love.physics.newFixture(topWall.b, topWall.s)
     topWall.f:setUserData("wall")
-    topWall.f:setCategory(WALL_CATEGORY)
+    topWall.f:setCategory(Config.WALL_CATEGORY)
 
     bottomWall = {}
     bottomWall.b = love.physics.newBody(world, screenWidth /2, screenHeight - 10, "static")
     bottomWall.s = love.physics.newRectangleShape(screenWidth - 20, 20)
     bottomWall.f = love.physics.newFixture(bottomWall.b, bottomWall.s)
     bottomWall.f:setUserData("wall")
-    bottomWall.f:setCategory(WALL_CATEGORY)
+    bottomWall.f:setCategory(Config.WALL_CATEGORY)
 
 
 

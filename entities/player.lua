@@ -1,6 +1,6 @@
 --! file: player.lua
 
-require "entities.constants"
+Config = require "entities.config"
 require "entities.projectile"
 
 Player = Object:extend()
@@ -9,20 +9,21 @@ function Player:new()
     self.bullet = {}
     self.bulletCount = 0
     self.lastShot = love.timer.getTime( )
-    self.health = 100
+    self.health = Config.PLAYER_HEALTH
+    self.shootingInterval = Config.PLAYER_SHOOTING_INTERVAL
     self.currentWeapon = 0
     self.weaponList = {}
-    self.width = 40
-    self.height = 40
-    self.speed = 300
+    self.width, self.height = unpack(Config.PLAYER_SIZE)
+    self.speed = Config.PLAYER_SPEED
+    self.initialX, self.initalY = unpack(Config.PLAYER_INITIAL_POS)
     self.direction = 'south' --! north, northeast, east, southest, south, southwest, west, northwest
-    self.body = love.physics.newBody(world, 400,200, "dynamic")  -- set x,y position (400,200) and let it move and hit other objects ("dynamic")
+    self.body = love.physics.newBody(world, self.initialX, self.initalY, "dynamic")  -- set x,y position (400,200) and let it move and hit other objects ("dynamic")
     self.s = love.physics.newRectangleShape(self.width, self.height)
     self.f = love.physics.newFixture(self.body, self.s)          -- connect body to shape
     self.body:setFixedRotation(true)
     self.f:setUserData("Player") 
-    self.f:setCategory(PLAYER_CATEGORY)
-    self.f:setMask(PLAYER_CATEGORY, BULLET_CATEGORY)
+    self.f:setCategory(Config.PLAYER_CATEGORY)
+    self.f:setMask(Config.PLAYER_CATEGORY, Config.BULLET_CATEGORY)
 end
 
 
@@ -54,7 +55,7 @@ function Player:update(dt)
     end
     
     if love.keyboard.isDown('space') then
-        if love.timer.getTime( ) - self.lastShot > 0.1 then
+        if love.timer.getTime( ) - self.lastShot > self.shootingInterval then
             self.lastShot = love.timer.getTime()
             local b = Bullet(self.body:getX(), self.body:getY(), self.direction)
             self.bulletCount = self.bulletCount + 1
@@ -72,7 +73,7 @@ end
 
 
 function Player:draw()
-    love.graphics.setColor(9, 184, 171, 255)
+    love.graphics.setColor(unpack(Config.PLAYER_COLOR))
     love.graphics.polygon("fill", self.body:getWorldPoints(self.s:getPoints()))
     
     for i, b in pairs(self.bullet) do 
