@@ -53,6 +53,9 @@ function Player:update(dt)
     elseif love.keyboard.isDown(Config.KEYS.WALK_SOUTH) then
         self.direction = Config.DIRECTION.S
         self.body:setLinearVelocity(0, self.speed)
+    else
+        local vx, vy = self.body:getLinearVelocity()
+        self.body:setLinearVelocity(vx * 0.9, vx * 0.9)
     end
     
     if love.keyboard.isDown(Config.KEYS.SHOOT) then
