@@ -15,6 +15,7 @@ function Player:new()
     self.weaponList = {}
     self.width, self.height = unpack(Config.PLAYER_SIZE)
     self.speed = Config.PLAYER_SPEED
+    self.diagonalSpeed = math.sqrt(math.pow(self.speed, 2)/2)
     self.initialX, self.initalY = unpack(Config.PLAYER_INITIAL_POS)
     self.direction = 'south' --! north, northeast, east, southest, south, southwest, west, northwest
     self.body = love.physics.newBody(world, self.initialX, self.initalY, "dynamic")  -- set x,y position (400,200) and let it move and hit other objects ("dynamic")
@@ -30,16 +31,16 @@ end
 function Player:update(dt)
     if love.keyboard.isDown(Config.KEYS.WALK_EAST) and love.keyboard.isDown(Config.KEYS.WALK_NORTH) then
         self.direction = Config.DIRECTION.NE
-        self.body:setLinearVelocity(self.speed, -self.speed)
+        self.body:setLinearVelocity(self.diagonalSpeed, -self.diagonalSpeed)
     elseif love.keyboard.isDown(Config.KEYS.WALK_EAST) and love.keyboard.isDown(Config.KEYS.WALK_SOUTH) then
         self.direction = Config.DIRECTION.SE
-        self.body:setLinearVelocity(self.speed, self.speed)
+        self.body:setLinearVelocity(self.diagonalSpeed, self.diagonalSpeed)
     elseif love.keyboard.isDown(Config.KEYS.WALK_WEST) and love.keyboard.isDown(Config.KEYS.WALK_NORTH) then
         self.direction = Config.DIRECTION.NW
-        self.body:setLinearVelocity(-self.speed, -self.speed)
+        self.body:setLinearVelocity(-self.diagonalSpeed, -self.diagonalSpeed)
     elseif love.keyboard.isDown(Config.KEYS.WALK_WEST) and love.keyboard.isDown(Config.KEYS.WALK_SOUTH) then
         self.direction = Config.DIRECTION.SW
-        self.body:setLinearVelocity(-self.speed, self.speed)
+        self.body:setLinearVelocity(-self.diagonalSpeed, self.diagonalSpeed)
     elseif love.keyboard.isDown(Config.KEYS.WALK_EAST) then
         self.direction = Config.DIRECTION.E
         self.body:setLinearVelocity(self.speed, 0)
