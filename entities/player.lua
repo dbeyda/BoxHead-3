@@ -71,7 +71,6 @@ function Player:keyreleased(key)
     end
 end
 
-
 function Player:draw()
     love.graphics.setColor(unpack(Config.PLAYER_COLOR))
     love.graphics.polygon("fill", self.body:getWorldPoints(self.s:getPoints()))
@@ -79,6 +78,13 @@ function Player:draw()
     for i, b in pairs(self.bullet) do 
         b:draw()
     end
+end
+
+function Player:getPosition()
+    pos = {}
+    pos.x = self.body:getX()
+    pos.y = self.body:getY()
+    return pos;
 end
 
 function Player:getDirection()

@@ -45,6 +45,9 @@ end
 function love.update(dt)
     world:update(dt)
     p1:update(dt)
+    for i, zombie in pairs(zombies) do 
+        zombie:follow_player(p1, dt)
+    end
 
     if love.timer.getTime() - lastTimeZombie > zombieInterval then
         lastTimeZombie = love.timer.getTime()
