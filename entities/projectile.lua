@@ -1,6 +1,6 @@
 --! file: projectile.lua
 
-Config = require "entities.config"
+Config = require "config"
 Bullet = Object:extend()
 
 function Bullet:new(x, y, direction)
@@ -15,21 +15,21 @@ function Bullet:new(x, y, direction)
     self.f:setCategory(Config.BULLET_CATEGORY)
     self.f:setMask(Config.PLAYER_CATEGORY, Config.BULLET_CATEGORY)
 
-    if direction == "north" then
+    if direction == Config.DIRECTION.N then
         self.body:setLinearVelocity(0, -self.speed)
-    elseif direction == "east" then
+    elseif direction == Config.DIRECTION.E then
         self.body:setLinearVelocity(self.speed, 0)
-    elseif direction == "south" then
+    elseif direction == Config.DIRECTION.S then
         self.body:setLinearVelocity(0, self.speed)
-    elseif direction == "west" then
+    elseif direction == Config.DIRECTION.W then
         self.body:setLinearVelocity(-self.speed, 0)
-    elseif direction == 'northeast' then
+    elseif direction == Config.DIRECTION.NE then
         self.body:setLinearVelocity(self.speed, -self.speed)
-    elseif direction == 'southeast' then
+    elseif direction == Config.DIRECTION.SE then
         self.body:setLinearVelocity(self.speed, self.speed)
-    elseif direction == 'northwest' then
+    elseif direction == Config.DIRECTION.NW then
         self.body:setLinearVelocity(-self.speed, -self.speed)
-    elseif direction == 'southwest' then
+    elseif direction == Config.DIRECTION.SW then
         self.body:setLinearVelocity(-self.speed, self.speed)
     end
 end

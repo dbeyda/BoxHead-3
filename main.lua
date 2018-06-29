@@ -1,7 +1,7 @@
 
 function love.load()
     Object = require 'lib.classic'
-    Config = require "entities.config"
+    Config = require "config"
     require "entities.player"
     require "entities.walls"
     require "entities.zombie"
@@ -19,7 +19,7 @@ function love.load()
     lastTimeZombie = 0
     zombieInterval = Config.ZOMBIE_INTERVAL
 
-    for i = 0,10 do
+    for i = 0,Config.INITIAL_ZOMBIES do
         addZombie()
     end
 end

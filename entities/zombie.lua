@@ -1,5 +1,5 @@
 --! file: zombie.lua
-Config = require "entities.config"
+Config = require "config"
 Zombie = Object:extend()
 
 function Zombie:new(x, y)

@@ -1,6 +1,6 @@
 --! file: player.lua
 
-Config = require "entities.config"
+Config = require "config"
 require "entities.projectile"
 
 Player = Object:extend()
@@ -29,32 +29,32 @@ end
 
 function Player:update(dt)
     if love.keyboard.isDown('right') and love.keyboard.isDown('up') then
-        self.direction = 'northeast'
+        self.direction = Config.DIRECTION.NE
         self.body:setLinearVelocity(self.speed, -self.speed)
     elseif love.keyboard.isDown('right') and love.keyboard.isDown('down') then
-        self.direction = 'southeast'
+        self.direction = Config.DIRECTION.SE
         self.body:setLinearVelocity(self.speed, self.speed)
     elseif love.keyboard.isDown('left') and love.keyboard.isDown('up') then
-        self.direction = 'northwest'
+        self.direction = Config.DIRECTION.NW
         self.body:setLinearVelocity(-self.speed, -self.speed)
     elseif love.keyboard.isDown('left') and love.keyboard.isDown('down') then
-        self.direction = 'southwest'
+        self.direction = Config.DIRECTION.SW
         self.body:setLinearVelocity(-self.speed, self.speed)
     elseif love.keyboard.isDown('right') then
-        self.direction = 'east'
+        self.direction = Config.DIRECTION.E
         self.body:setLinearVelocity(self.speed, 0)
     elseif love.keyboard.isDown('left') then
-        self.direction = 'west'
+        self.direction = Config.DIRECTION.W
         self.body:setLinearVelocity(-self.speed, 0)
     elseif love.keyboard.isDown('up') then
-        self.direction = 'north'
+        self.direction = Config.DIRECTION.N
         self.body:setLinearVelocity(0, -self.speed)
     elseif love.keyboard.isDown('down') then
-        self.direction = 'south'
+        self.direction = Config.DIRECTION.S
         self.body:setLinearVelocity(0, self.speed)
     end
     
-    if love.keyboard.isDown('space') then
+    if love.keyboard.isDown(Config.KEYS.SHOOT) then
         if love.timer.getTime( ) - self.lastShot > self.shootingInterval then
             self.lastShot = love.timer.getTime()
             local b = Bullet(self.body:getX(), self.body:getY(), self.direction)
@@ -79,41 +79,6 @@ function Player:draw()
     for i, b in pairs(self.bullet) do 
         b:draw()
     end
-
-    -- love.graphics.setColor(0, 105, 255, 255)
-    -- love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
-
-    -- --! draw the front of the player in the right direction
-    -- local xx = 0
-    -- local yy = 0
-    -- local size = 10
-    -- if self.direction == 'north' then
-    --     xx = self.x + (self.width/2) - size/2
-    --     yy = self.y
-    -- elseif self.direction == 'south' then
-    --     xx = self.x + (self.width/2) - size/2
-    --     yy = self.y + self.height - size
-    -- elseif self.direction == 'east' then
-    --     xx = self.x + self.width - size
-    --     yy = self.y + self.height/2 - size/2
-    -- elseif self.direction == 'west' then
-    --     xx = self.x
-    --     yy = self.y + self.height/2 - size/2
-    -- elseif self.direction == 'northeast' then
-    --     xx = self.x + self.width - size
-    --     yy = self.y
-    -- elseif self.direction == 'northwest' then
-    --     xx = self.x
-    --     yy = self.y
-    -- elseif self.direction == 'southeast' then
-    --     xx = self.x + self.width - size
-    --     yy = self.y + self.height - size
-    -- elseif self.direction == 'southwest' then
-    --     xx = self.x
-    --     yy = self.y + self.height - size
-    -- end
-    -- love.graphics.setColor(50, 0, 0, 255)
-    -- love.graphics.rectangle("fill", xx, yy, size, size)
 end
 
 function Player:getDirection()

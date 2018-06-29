@@ -1,6 +1,6 @@
 --! file: walls.lua
 
-Config = require "entities.config"
+Config = require "config"
 Walls = Object:extend()
 
 function Walls:new()
