@@ -1,8 +1,41 @@
 --! file: zombie.lua
 require "math"
+require "lib.utils"
 Config = require "config"
 Zombie = Object:extend()
 
+-- Class properties
+Zombie.zombies = {}
+Zombie.zombiesCount = 0
+Zombie.lastTimeZombie = 0
+Zombie.zombieInterval = Config.ZOMBIE_INTERVAL
+
+-- Static methods
+function Zombie.addZombie()
+    Zombie.zombiesCount = Zombie.zombiesCount + 1
+    z = Zombie(getRandomPosition())
+    z.f:setUserData(Zombie.zombiesCount)
+    Zombie.zombies[Zombie.zombiesCount] = z
+end
+
+function Zombie.killZombie(zombie)
+    if Zombie.zombies[zombie] ~= nil then 
+        Zombie.zombies[zombie].f:destroy()
+        Zombie.zombies[zombie] = nil
+    end
+end
+
+function Zombie.wasHit(zombieId, damage)
+    if Zombie.zombies[zombieId] ~= nil then
+        z = Zombie.zombies[zombieId]
+        z.health = z.health - damage
+        if z.health <= 0 then
+            Zombie.killZombie(zombieId)
+        end
+    end
+end
+
+-- Constructor
 function Zombie:new(x, y)
     self.health = Config.ZOMBIE_HEALTH
     self.damage = Config.ZOMBIE_DAMAGE
@@ -16,8 +49,16 @@ function Zombie:new(x, y)
     self.f:setCategory(Config.ZOMBIE_CATEGORY)
 end
 
+-- Methods
+
 function Zombie:draw()
-    love.graphics.setColor(unpack(Config.ZOMBIE_COLOR))
+    if self.health > Config.ZOMBIE_HEALTH * 0.7 then
+        love.graphics.setColor(unpack(Config.ZOMBIE_FULL_LIFE_COLOR))
+    elseif self.health > Config.ZOMBIE_HEALTH * 0.4 then
+        love.graphics.setColor(unpack(Config.ZOMBIE_MID_LIFE_COLOR))
+    else
+        love.graphics.setColor(unpack(Config.ZOMBIE_LOW_LIFE_COLOR))
+    end
     love.graphics.polygon("fill", self.body:getWorldPoints(self.s:getPoints()))
 end
 

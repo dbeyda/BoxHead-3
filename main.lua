@@ -14,44 +14,21 @@ function love.load()
     walls = Walls()
     p1 = Player()
 
-    zombies = {}
-    zombiesCount = 0
-    lastTimeZombie = 0
-    zombieInterval = Config.ZOMBIE_INTERVAL
-
     for i = 0,Config.INITIAL_ZOMBIES do
-        addZombie()
-    end
-end
-
-function getRandomPosition()
-    return math.random(0, screenWidth), math.random(0, screenHeight)
-end
-
-function addZombie()
-    zombiesCount = zombiesCount + 1
-    z = Zombie(getRandomPosition())
-    z.f:setUserData(zombiesCount)
-    zombies[zombiesCount] = z
-end
-
-function killZombie(zombie)
-    if zombies[zombie] ~= nil then 
-        zombies[zombie].f:destroy()
-        zombies[zombie] = nil
+        Zombie.addZombie()
     end
 end
 
 function love.update(dt)
     world:update(dt)
     p1:update(dt)
-    for i, zombie in pairs(zombies) do 
+    for i, zombie in pairs(Zombie.zombies) do 
         zombie:followPlayer(p1, dt)
     end
 
-    if love.timer.getTime() - lastTimeZombie > zombieInterval then
-        lastTimeZombie = love.timer.getTime()
-        addZombie()
+    if love.timer.getTime() - Zombie.lastTimeZombie > Zombie.zombieInterval then
+        Zombie.lastTimeZombie = love.timer.getTime()
+        Zombie.addZombie()
     end
 end
 
@@ -60,7 +37,7 @@ function love.draw()
     p1:draw()
     walls:draw()
     
-    for i, z in pairs(zombies) do
+    for i, z in pairs(Zombie.zombies) do
         z:draw()
     end
 end
@@ -83,10 +60,12 @@ function beginContact(a, b, coll)
 
     -- Bullet x Zombie collision handling
     if (a:getCategory() == Config.ZOMBIE_CATEGORY and b:getCategory() == Config.BULLET_CATEGORY) then
-        killZombie(a:getUserData())
+        local damage = 10
+        Zombie.wasHit(a:getUserData(), damage)
         p1:removeBullet(b:getUserData())
     elseif (a:getCategory() == Config.BULLET_CATEGORY and b:getCategory() == Config.ZOMBIE_CATEGORY) then
-        killZombie(b:getUserData())
+        local damage = 10
+        Zombie.wasHit(b:getUserData(), damage)
         p1:removeBullet(a:getUserData())
     end
     
