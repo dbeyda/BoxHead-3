@@ -14,7 +14,6 @@ function Zombie:new(x, y)
     self.f = love.physics.newFixture(self.body, self.s)          -- connect body to shape
     self.body:setFixedRotation(true)
     self.f:setCategory(Config.ZOMBIE_CATEGORY)
-    self.f:setMask(Config.ZOMBIE_CATEGORY)
 end
 
 function Zombie:draw()
