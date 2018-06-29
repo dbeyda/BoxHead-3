@@ -49,7 +49,7 @@ function Zombie:follow_player(player, dt)
         sign = delta_x/math.abs(delta_x)
         self.body:setLinearVelocity(sign*Config.ZOMBIE_SPEED, 0)
 
-    -- movement only in y
+    -- movement only in y 
     else
         sign = delta_y/math.abs(delta_y)
         self.body:setLinearVelocity(0, sign*Config.ZOMBIE_SPEED)
