@@ -28,28 +28,28 @@ end
 
 
 function Player:update(dt)
-    if love.keyboard.isDown('right') and love.keyboard.isDown('up') then
+    if love.keyboard.isDown(Config.KEYS.WALK_EAST) and love.keyboard.isDown(Config.KEYS.WALK_NORTH) then
         self.direction = Config.DIRECTION.NE
         self.body:setLinearVelocity(self.speed, -self.speed)
-    elseif love.keyboard.isDown('right') and love.keyboard.isDown('down') then
+    elseif love.keyboard.isDown(Config.KEYS.WALK_EAST) and love.keyboard.isDown(Config.KEYS.WALK_SOUTH) then
         self.direction = Config.DIRECTION.SE
         self.body:setLinearVelocity(self.speed, self.speed)
-    elseif love.keyboard.isDown('left') and love.keyboard.isDown('up') then
+    elseif love.keyboard.isDown(Config.KEYS.WALK_WEST) and love.keyboard.isDown(Config.KEYS.WALK_NORTH) then
         self.direction = Config.DIRECTION.NW
         self.body:setLinearVelocity(-self.speed, -self.speed)
-    elseif love.keyboard.isDown('left') and love.keyboard.isDown('down') then
+    elseif love.keyboard.isDown(Config.KEYS.WALK_WEST) and love.keyboard.isDown(Config.KEYS.WALK_SOUTH) then
         self.direction = Config.DIRECTION.SW
         self.body:setLinearVelocity(-self.speed, self.speed)
-    elseif love.keyboard.isDown('right') then
+    elseif love.keyboard.isDown(Config.KEYS.WALK_EAST) then
         self.direction = Config.DIRECTION.E
         self.body:setLinearVelocity(self.speed, 0)
-    elseif love.keyboard.isDown('left') then
+    elseif love.keyboard.isDown(Config.KEYS.WALK_WEST) then
         self.direction = Config.DIRECTION.W
         self.body:setLinearVelocity(-self.speed, 0)
-    elseif love.keyboard.isDown('up') then
+    elseif love.keyboard.isDown(Config.KEYS.WALK_NORTH) then
         self.direction = Config.DIRECTION.N
         self.body:setLinearVelocity(0, -self.speed)
-    elseif love.keyboard.isDown('down') then
+    elseif love.keyboard.isDown(Config.KEYS.WALK_SOUTH) then
         self.direction = Config.DIRECTION.S
         self.body:setLinearVelocity(0, self.speed)
     end
@@ -66,7 +66,7 @@ function Player:update(dt)
 end
 
 function Player:keyreleased(key)
-    if key == 'left' or key == 'right' or key == 'down' or key == 'up' then
+    if key == Config.KEYS.WALK_WEST or key == Config.KEYS.WALK_EAST or key == Config.KEYS.WALK_SOUTH or key == Config.KEYS.WALK_NORTH then
         self.body:setLinearVelocity(0,0)
     end
 end

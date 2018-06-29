@@ -43,5 +43,10 @@ c.DIRECTION.SW = "southwest"
 -- Key bindings
 c.KEYS = {}
 c.KEYS.SHOOT = "space"
+c.KEYS.WALK_NORTH = "up"
+c.KEYS.WALK_SOUTH = "down"
+c.KEYS.WALK_EAST = "right"
+c.KEYS.WALK_WEST = "left"
+
 
 return c
