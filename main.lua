@@ -1,13 +1,17 @@
 
 function love.load()
     Object = require 'lib.classic'
-    Config = require "config"
-    require "entities.player"
-    require "entities.walls"
-    require "entities.zombie"
+    sti = require 'lib.sti'
+    Config = require 'config'
+    Camera = require 'lib.Camera'
+    require 'entities.player'
+    require 'entities.walls'
+    require 'entities.zombie'
 
     screenWidth, screenHeight = love.graphics.getDimensions()
 
+    camera = Camera()
+    map = sti('assets/level1.lua')
     world = love.physics.newWorld(0, 0, true)  --Gravity is being set to 0 in the x direction and 200 in the y direction.
     world:setCallbacks(beginContact, endContact, preSolve, postSolve)
 
@@ -20,6 +24,7 @@ function love.load()
 end
 
 function love.update(dt)
+    map:update(dt)
     world:update(dt)
     p1:update(dt)
     for i, zombie in pairs(Zombie.zombies) do 
@@ -34,12 +39,14 @@ end
 
 
 function love.draw()
+    pos = p1:getPosition()
+    map:draw(-pos.x+screenWidth/2, -pos.y+screenHeight/2)
     p1:draw()
-    walls:draw()
+    walls:draw(p1)
     
     for i, z in pairs(Zombie.zombies) do
-        z:draw()
-    end
+        z:draw(p1)
+        end
 end
 
 function love.keyreleased(key)

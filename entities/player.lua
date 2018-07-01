@@ -1,7 +1,7 @@
 --! file: player.lua
 
-Config = require "config"
-require "entities.projectile"
+Config = require 'config'
+require 'entities.projectile'
 
 Player = Object:extend()
 
@@ -18,11 +18,11 @@ function Player:new()
     self.diagonalSpeed = math.sqrt(math.pow(self.speed, 2)/2)
     self.initialX, self.initalY = unpack(Config.PLAYER_INITIAL_POS)
     self.direction = 'south' --! north, northeast, east, southest, south, southwest, west, northwest
-    self.body = love.physics.newBody(world, self.initialX, self.initalY, "dynamic")  -- set x,y position (400,200) and let it move and hit other objects ("dynamic")
+    self.body = love.physics.newBody(world, self.initialX, self.initalY, 'dynamic')  -- set x,y position (400,200) and let it move and hit other objects ('dynamic')
     self.s = love.physics.newRectangleShape(self.width, self.height)
     self.f = love.physics.newFixture(self.body, self.s)          -- connect body to shape
     self.body:setFixedRotation(true)
-    self.f:setUserData("Player") 
+    self.f:setUserData('Player') 
     self.f:setCategory(Config.PLAYER_CATEGORY)
     self.f:setMask(Config.PLAYER_CATEGORY, Config.BULLET_CATEGORY)
 end
@@ -63,8 +63,8 @@ function Player:update(dt)
             self.lastShot = love.timer.getTime()
             local b = Bullet(self.body:getX(), self.body:getY(), self.direction)
             self.bulletCount = self.bulletCount + 1
-            b.f:setUserData("bullet"..self.bulletCount)
-            self.bullet["bullet"..self.bulletCount] = b
+            b.f:setUserData('bullet'..self.bulletCount)
+            self.bullet['bullet'..self.bulletCount] = b
         end
     end
 end
@@ -77,10 +77,16 @@ end
 
 function Player:draw()
     love.graphics.setColor(unpack(Config.PLAYER_COLOR))
-    love.graphics.polygon("fill", self.body:getWorldPoints(self.s:getPoints()))
+    -- love.graphics.polygon('fill', self.body:getWorldPoints(self.s:getPoints()))
+    screenWidth, screenHeight = love.graphics.getDimensions()
+    love.graphics.polygon('fill', screenWidth/2-self.width/2, screenHeight/2-self.height/2,
+                                    screenWidth/2-self.width/2, screenHeight/2+self.height/2,
+                                    screenWidth/2+self.width/2, screenHeight/2+self.height/2,
+                                    screenWidth/2+self.width/2, screenHeight/2-self.height/2)
+
     
     for i, b in pairs(self.bullet) do 
-        b:draw()
+        b:draw(self)
     end
 end
 

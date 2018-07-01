@@ -1,7 +1,7 @@
 --! file: zombie.lua
-require "math"
-require "lib.utils"
-Config = require "config"
+require 'math'
+require 'lib.utils'
+Config = require 'config'
 Zombie = Object:extend()
 
 -- Class properties
@@ -42,7 +42,7 @@ function Zombie:new(x, y)
     self.speed = Config.ZOMBIE_SPEED
     self.width, self.height = unpack(Config.ZOMBIE_SIZE)
     self.direction = 'south' --! north, northeast, east, southest, south, southwest, west, northwest
-    self.body = love.physics.newBody(world, x, y, "dynamic")  -- set x,y position (400,200) and let it move and hit other objects ("dynamic")
+    self.body = love.physics.newBody(world, x, y, 'dynamic')  -- set x,y position (400,200) and let it move and hit other objects ('dynamic')
     self.s = love.physics.newRectangleShape(self.width, self.height)
     self.f = love.physics.newFixture(self.body, self.s)          -- connect body to shape
     self.body:setFixedRotation(true)
@@ -51,7 +51,7 @@ end
 
 -- Methods
 
-function Zombie:draw()
+function Zombie:draw(player)
     if self.health > Config.ZOMBIE_HEALTH * 0.7 then
         love.graphics.setColor(unpack(Config.ZOMBIE_FULL_LIFE_COLOR))
     elseif self.health > Config.ZOMBIE_HEALTH * 0.4 then
@@ -59,7 +59,13 @@ function Zombie:draw()
     else
         love.graphics.setColor(unpack(Config.ZOMBIE_LOW_LIFE_COLOR))
     end
-    love.graphics.polygon("fill", self.body:getWorldPoints(self.s:getPoints()))
+    screenWidth, screenHeight = love.graphics.getDimensions()
+    pos = player:getPosition()
+    a, b, c, d, e, f, g, h = self.body:getWorldPoints(self.s:getPoints())
+    love.graphics.polygon('fill', a-pos.x+screenWidth/2, b-pos.y+screenHeight/2,
+                                    c-pos.x+screenWidth/2, d-pos.y+screenHeight/2,
+                                    e-pos.x+screenWidth/2, f-pos.y+screenHeight/2,
+                                    g-pos.x+screenWidth/2, h-pos.y+screenHeight/2)
 end
 
 function Zombie:getPosition()
