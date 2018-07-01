@@ -24,6 +24,9 @@ function love.load()
 end
 
 function love.update(dt)
+    camera:update(dt)
+    pos = p1:getPosition()
+    camera:follow(pos.x, pos.y)
     map:update(dt)
     world:update(dt)
     p1:update(dt)
@@ -40,13 +43,15 @@ end
 
 function love.draw()
     pos = p1:getPosition()
-    map:draw(-pos.x+screenWidth/2, -pos.y+screenHeight/2)
+    camera:attach()
+    map:draw(-pos.x + screenWidth/2, -pos.y + screenHeight/2)
+    walls:draw()
     p1:draw()
-    walls:draw(p1)
-    
-    for i, z in pairs(Zombie.zombies) do
-        z:draw(p1)
+        
+        for i, z in pairs(Zombie.zombies) do
+            z:draw()
         end
+    camera:detach()
 end
 
 function love.keyreleased(key)
