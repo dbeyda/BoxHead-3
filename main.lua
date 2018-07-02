@@ -42,7 +42,11 @@ function love.draw()
     love.graphics.push()
     love.graphics.translate(screenWidth/2, screenHeight/2)
     love.graphics.translate(-pos.x, -pos.y)
+
+    love.graphics.setColor(255, 255, 255)
     map:draw(-pos.x + screenWidth/2, -pos.y + screenHeight/2)
+
+    
     walls:draw()
     p1:draw()
         for i, z in pairs(Zombie.zombies) do
