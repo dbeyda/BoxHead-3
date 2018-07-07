@@ -60,10 +60,6 @@ function love.draw()
     for i, z in pairs(Zombie.zombies) do
         z:draw()
     end
-    for i, wall in pairs(Wall.walls) do
-        wall:draw()
-        -- print (i,wall.b:getX(), wall.b:getY())
-    end
     love.graphics.pop()
 end
 

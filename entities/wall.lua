@@ -7,6 +7,7 @@ Wall = Object:extend()
 Wall.walls = {}
 
 function Wall:new(x, y, width, height, angle, name)
+    love.graphics.setColor(100, 25, 80, 0)
     local screenWidth, screenHeight = love.graphics.getDimensions()
     angle = math.rad(angle)
     self.b = love.physics.newBody(world, x, y, "static")
@@ -18,6 +19,5 @@ function Wall:new(x, y, width, height, angle, name)
 end
 
 function Wall:draw(dt)
-    love.graphics.setColor(100, 25, 80, 255)
-    love.graphics.polygon("fill", self.b:getWorldPoints(self.s:getPoints()))
+    love.graphics.setColor(100, 25, 80, 0)
 end
