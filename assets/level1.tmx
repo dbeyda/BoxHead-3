@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="left-up" width="50" height="50" tilewidth="32" tileheight="32" infinite="0" nextobjectid="11">
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="left-up" width="50" height="50" tilewidth="32" tileheight="32" infinite="0" nextobjectid="16">
  <tileset firstgid="1" source="Tilesets/avalon_cliff_tileset.tsx"/>
  <tileset firstgid="241" source="Tilesets/avalon_extra_unfinished.tsx"/>
  <tileset firstgid="329" source="Tilesets/avalon_ground_tiles.tsx"/>
@@ -28,5 +28,17 @@
   <object id="8" name="wall-south" type="wall" x="312.884" y="1252.99" width="954.462" height="28"/>
   <object id="9" name="wall-west" type="wall" x="409.007" y="317.014" width="988.173" height="28" rotation="90"/>
   <object id="10" name="wall-east" type="wall" x="1221.29" y="325.179" width="951.397" height="28" rotation="90"/>
+  <object id="11" name="zombie-respawn4" type="zombie-respawn" x="986.477" y="647.307">
+   <point/>
+  </object>
+  <object id="12" name="zombie-respawn3" type="zombie-respawn" x="922.19" y="964.309">
+   <point/>
+  </object>
+  <object id="13" name="zombie-respawn2" type="zombie-respawn" x="605.187" y="1015.3">
+   <point/>
+  </object>
+  <object id="15" name="zombie-respawn1" type="zombie-respawn" x="583.019" y="525.382">
+   <point/>
+  </object>
  </objectgroup>
 </map>

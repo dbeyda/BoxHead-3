@@ -8,7 +8,7 @@ return {
   height = 50,
   tilewidth = 32,
   tileheight = 32,
-  nextobjectid = 11,
+  nextobjectid = 16,
   properties = {},
   tilesets = {
     {
@@ -255,6 +255,58 @@ return {
           width = 951.397,
           height = 28,
           rotation = 90,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 11,
+          name = "zombie-respawn4",
+          type = "zombie-respawn",
+          shape = "point",
+          x = 986.477,
+          y = 647.307,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 12,
+          name = "zombie-respawn3",
+          type = "zombie-respawn",
+          shape = "point",
+          x = 922.19,
+          y = 964.309,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 13,
+          name = "zombie-respawn2",
+          type = "zombie-respawn",
+          shape = "point",
+          x = 605.187,
+          y = 1015.3,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 15,
+          name = "zombie-respawn1",
+          type = "zombie-respawn",
+          shape = "point",
+          x = 583.019,
+          y = 525.382,
+          width = 0,
+          height = 0,
+          rotation = 0,
           visible = true,
           properties = {}
         }

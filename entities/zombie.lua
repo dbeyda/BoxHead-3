@@ -6,14 +6,16 @@ Zombie = Object:extend()
 
 -- Class properties
 Zombie.zombies = {}
+Zombie.respawnZones = {}
 Zombie.zombiesCount = 0
 Zombie.lastTimeZombie = 0
 Zombie.zombieInterval = Config.ZOMBIE_INTERVAL
 
 -- Static methods
 function Zombie.addZombie()
+    local zoneId = math.random(1, #Zombie.respawnZones)
     Zombie.zombiesCount = Zombie.zombiesCount + 1
-    z = Zombie(getRandomPosition())
+    z = Zombie(Zombie.respawnZones[zoneId].x, Zombie.respawnZones[zoneId].y)
     z.f:setUserData(Zombie.zombiesCount)
     Zombie.zombies[Zombie.zombiesCount] = z
 end

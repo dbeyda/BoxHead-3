@@ -21,10 +21,12 @@ function love.load()
             p1 = Player(object.x, object.y)
         elseif object.type == "wall" then
             Wall(object.x, object.y, object.width, object.height, object.rotation, object.name)
+        elseif object.type == "zombie-respawn" then
+            table.insert(Zombie.respawnZones, {x=object.x, y=object.y})
         end
-        for i, prop in pairs(object) do
-            print(i, prop)
-        end
+        -- for i, prop in pairs(object) do
+        --     print(i, prop)
+        -- end
     end
 
     for i = 0,Config.INITIAL_ZOMBIES do
@@ -88,13 +90,6 @@ function beginContact(a, b, coll)
         local damage = 10
         Zombie.wasHit(b:getUserData(), damage)
         p1:removeBullet(a:getUserData())
-    end
-
-    if (a:getCategory() == Config.WALL_CATEGORY and b:getCategory() == Config.PLAYER_CATEGORY) then
-        print(a:getUserData())
-    elseif (a:getCategory() == Config.PLAYER_CATEGORY and b:getCategory() == Config.WALL_CATEGORY) then
-        print(b:getUserData())
-        
     end
 end
  
