@@ -33,8 +33,10 @@ function Zombie.wasHit(zombieId, damage)
         z.health = z.health - damage
         if z.health <= 0 then
             Zombie.killZombie(zombieId)
+            return true
         end
     end
+    return false
 end
 
 -- Constructor

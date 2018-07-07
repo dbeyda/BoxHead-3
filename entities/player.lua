@@ -6,6 +6,7 @@ require "entities.projectile"
 Player = Object:extend()
 
 function Player:new(x, y)
+    self.score = 0
     self.bullet = {}
     self.bulletCount = 0
     self.lastShot = love.timer.getTime( )
@@ -25,6 +26,10 @@ function Player:new(x, y)
     self.f:setUserData("Player") 
     self.f:setCategory(Config.PLAYER_CATEGORY)
     self.f:setMask(Config.PLAYER_CATEGORY, Config.BULLET_CATEGORY)
+end
+
+function Player:updateScore(points)
+    self.score = self.score + points
 end
 
 

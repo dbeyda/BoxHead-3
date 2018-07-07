@@ -9,6 +9,8 @@ function love.load()
     require 'entities.zombie'
 
     love.window.setFullscreen(true, "desktop")
+    love.graphics.setFont(love.graphics.newFont(32))
+
     screenWidth, screenHeight = love.graphics.getDimensions()
 
     map = sti('assets/level1.lua', { "box2d" })
@@ -52,7 +54,6 @@ end
 
 function love.draw()
     pos = p1:getPosition()
-
     love.graphics.push()
     love.graphics.translate(screenWidth/2, screenHeight/2)
     love.graphics.translate(-pos.x, -pos.y)
@@ -64,6 +65,9 @@ function love.draw()
         z:draw()
     end
     love.graphics.pop()
+
+    love.graphics.setColor(255, 255, 255, 255)
+    love.graphics.print("Score:"..p1.score, 20, 20)
 end
 
 function love.keyreleased(key)
@@ -85,11 +89,17 @@ function beginContact(a, b, coll)
     -- Bullet x Zombie collision handling
     if (a:getCategory() == Config.ZOMBIE_CATEGORY and b:getCategory() == Config.BULLET_CATEGORY) then
         local damage = 10
-        Zombie.wasHit(a:getUserData(), damage)
+        local killedZombie = Zombie.wasHit(a:getUserData(), damage)
+        if (killedZombie) then
+            p1:updateScore(15)
+        end
         p1:removeBullet(b:getUserData())
     elseif (a:getCategory() == Config.BULLET_CATEGORY and b:getCategory() == Config.ZOMBIE_CATEGORY) then
         local damage = 10
-        Zombie.wasHit(b:getUserData(), damage)
+        local killedZombie = Zombie.wasHit(b:getUserData(), damage)
+        if (killedZombie) then
+            p1:updateScore(15)
+        end
         p1:removeBullet(a:getUserData())
     end
 end
