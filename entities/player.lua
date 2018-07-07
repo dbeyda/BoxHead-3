@@ -7,6 +7,8 @@ Player = Object:extend()
 
 function Player:new(x, y)
     self.score = 0
+    self.lastHit = love.timer.getTime()
+    self.hitInterval = Config.PLAYER_HIT_INTERVAL
     self.bullet = {}
     self.bulletCount = 0
     self.lastShot = love.timer.getTime( )
@@ -30,6 +32,17 @@ end
 
 function Player:updateScore(points)
     self.score = self.score + points
+end
+
+function Player:wasHit(damage)
+    if love.timer.getTime( ) - self.lastHit > self.hitInterval then
+        self.lastHit = love.timer.getTime()
+        self.health = self.health - damage
+        if self.health <= 0 then
+            return true
+        end
+    end
+    return false
 end
 
 

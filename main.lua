@@ -27,6 +27,7 @@ function love.load()
         elseif object.type == "zombie-respawn" then
             table.insert(Zombie.respawnZones, {x=object.x, y=object.y})
         end
+        -- -- Prints object's properties
         -- for i, prop in pairs(object) do
         --     print(i, prop)
         -- end
@@ -68,13 +69,34 @@ function love.draw()
 
     love.graphics.setColor(255, 255, 255, 255)
     love.graphics.print("Score:"..p1.score, 20, 20)
+    love.graphics.print("Health:"..p1.health, screenWidth - 200, 20)
 end
 
 function love.keyreleased(key)
     p1:keyreleased(key)
 end
 
--- collision functions --
+-- Collision handlers
+
+function handleBulletZombieCollision(bullet, zombie)
+    local damage = 10
+    local killedZombie = Zombie.wasHit(zombie:getUserData(), damage)
+    if (killedZombie) then
+        p1:updateScore(15)
+    end
+    p1:removeBullet(bullet:getUserData())
+end
+
+function handlePlayerZombieCollision(player, zombie)
+    local damage = 10
+    local isDead = p1:wasHit(damage)
+    if isDead then
+        print ("DEAD")
+    end
+end
+
+
+-- Collision callbacks --
 
 function beginContact(a, b, coll)
     x,y = coll:getNormal()
@@ -88,19 +110,9 @@ function beginContact(a, b, coll)
 
     -- Bullet x Zombie collision handling
     if (a:getCategory() == Config.ZOMBIE_CATEGORY and b:getCategory() == Config.BULLET_CATEGORY) then
-        local damage = 10
-        local killedZombie = Zombie.wasHit(a:getUserData(), damage)
-        if (killedZombie) then
-            p1:updateScore(15)
-        end
-        p1:removeBullet(b:getUserData())
+        handleBulletZombieCollision(b, a)
     elseif (a:getCategory() == Config.BULLET_CATEGORY and b:getCategory() == Config.ZOMBIE_CATEGORY) then
-        local damage = 10
-        local killedZombie = Zombie.wasHit(b:getUserData(), damage)
-        if (killedZombie) then
-            p1:updateScore(15)
-        end
-        p1:removeBullet(a:getUserData())
+        handleBulletZombieCollision(a, b)
     end
 end
  
@@ -108,6 +120,12 @@ function endContact(a, b, coll)
 end
  
 function preSolve(a, b, coll)
+    -- Player x Zombie collision handling
+    if (a:getCategory() == Config.ZOMBIE_CATEGORY and b:getCategory() == Config.PLAYER_CATEGORY) then
+        handlePlayerZombieCollision(b, a)
+    elseif (a:getCategory() == Config.PLAYER_CATEGORY and b:getCategory() == Config.ZOMBIE_CATEGORY) then
+        handlePlayerZombieCollision(a, b)
+    end
 end
  
 function postSolve(a, b, coll, normalimpulse, tangentimpulse) 
