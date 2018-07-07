@@ -18,20 +18,18 @@ function love.load()
 
     for k, object in pairs(map.objects) do
         if object.name == "player" then
-            player = object
+            p1 = Player(object.x, object.y)
         elseif object.type == "wall" then
             Wall(object.x, object.y, object.width, object.height, object.rotation, object.name)
         end
-        -- for i, prop in pairs(object) do
-        --     print(i, prop)
-        -- end
+        for i, prop in pairs(object) do
+            print(i, prop)
+        end
     end
-    p1 = Player(player.x, player.y)
 
-
-    -- for i = 0,Config.INITIAL_ZOMBIES do
-    --     Zombie.addZombie()
-    -- end
+    for i = 0,Config.INITIAL_ZOMBIES do
+        Zombie.addZombie()
+    end
 end
 
 function love.update(dt)
@@ -44,7 +42,7 @@ function love.update(dt)
 
     if love.timer.getTime() - Zombie.lastTimeZombie > Zombie.zombieInterval then
         Zombie.lastTimeZombie = love.timer.getTime()
-        -- Zombie.addZombie()
+        Zombie.addZombie()
     end
 end
 
