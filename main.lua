@@ -8,6 +8,7 @@ function love.load()
     require 'entities.wall'
     require 'entities.zombie'
 
+    love.window.setFullscreen(true, "desktop")
     screenWidth, screenHeight = love.graphics.getDimensions()
 
     map = sti('assets/level1.lua', { "box2d" })
