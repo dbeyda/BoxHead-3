@@ -5,7 +5,7 @@ require "entities.projectile"
 
 Player = Object:extend()
 
-function Player:new()
+function Player:new(x, y)
     self.bullet = {}
     self.bulletCount = 0
     self.lastShot = love.timer.getTime( )
@@ -16,7 +16,7 @@ function Player:new()
     self.width, self.height = unpack(Config.PLAYER_SIZE)
     self.speed = Config.PLAYER_SPEED
     self.diagonalSpeed = math.sqrt(math.pow(self.speed, 2)/2)
-    self.initialX, self.initalY = unpack(Config.PLAYER_INITIAL_POS)
+    self.initialX, self.initalY = x, y
     self.direction = 'south' --! north, northeast, east, southest, south, southwest, west, northwest
     self.body = love.physics.newBody(world, self.initialX, self.initalY, "dynamic")  -- set x,y position (400,200) and let it move and hit other objects ("dynamic")
     self.s = love.physics.newRectangleShape(self.width, self.height)

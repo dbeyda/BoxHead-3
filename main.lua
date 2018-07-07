@@ -5,21 +5,33 @@ function love.load()
     Config = require 'config'
     Camera = require 'lib.Camera'
     require 'entities.player'
-    require 'entities.walls'
+    require 'entities.wall'
     require 'entities.zombie'
 
     screenWidth, screenHeight = love.graphics.getDimensions()
 
-    map = sti('assets/level1.lua')
-    world = love.physics.newWorld(0, 0, true)  --Gravity is being set to 0 in the x direction and 200 in the y direction.
+    map = sti('assets/level1.lua', { "box2d" })
+    world = love.physics.newWorld(0, 0, true)
+    map:box2d_init(world)
+    map:addCustomLayer("Sprite Layer", 5)
     world:setCallbacks(beginContact, endContact, preSolve, postSolve)
 
-    walls = Walls()
-    p1 = Player()
-
-    for i = 0,Config.INITIAL_ZOMBIES do
-        Zombie.addZombie()
+    for k, object in pairs(map.objects) do
+        if object.name == "player" then
+            player = object
+        elseif object.type == "wall" then
+            Wall(object.x, object.y, object.width, object.height, object.rotation, object.name)
+        end
+        -- for i, prop in pairs(object) do
+        --     print(i, prop)
+        -- end
     end
+    p1 = Player(player.x, player.y)
+
+
+    -- for i = 0,Config.INITIAL_ZOMBIES do
+    --     Zombie.addZombie()
+    -- end
 end
 
 function love.update(dt)
@@ -32,26 +44,28 @@ function love.update(dt)
 
     if love.timer.getTime() - Zombie.lastTimeZombie > Zombie.zombieInterval then
         Zombie.lastTimeZombie = love.timer.getTime()
-        Zombie.addZombie()
+        -- Zombie.addZombie()
     end
 end
 
 
 function love.draw()
     pos = p1:getPosition()
+
     love.graphics.push()
     love.graphics.translate(screenWidth/2, screenHeight/2)
     love.graphics.translate(-pos.x, -pos.y)
 
     love.graphics.setColor(255, 255, 255)
     map:draw(-pos.x + screenWidth/2, -pos.y + screenHeight/2)
-
-    
-    walls:draw()
     p1:draw()
-        for i, z in pairs(Zombie.zombies) do
-            z:draw()
-        end
+    for i, z in pairs(Zombie.zombies) do
+        z:draw()
+    end
+    for i, wall in pairs(Wall.walls) do
+        wall:draw()
+        -- print (i,wall.b:getX(), wall.b:getY())
+    end
     love.graphics.pop()
 end
 
@@ -80,6 +94,13 @@ function beginContact(a, b, coll)
         local damage = 10
         Zombie.wasHit(b:getUserData(), damage)
         p1:removeBullet(a:getUserData())
+    end
+
+    if (a:getCategory() == Config.WALL_CATEGORY and b:getCategory() == Config.PLAYER_CATEGORY) then
+        print(a:getUserData())
+    elseif (a:getCategory() == Config.PLAYER_CATEGORY and b:getCategory() == Config.WALL_CATEGORY) then
+        print(b:getUserData())
+        
     end
 end
  
