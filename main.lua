@@ -87,9 +87,9 @@ function handleBulletZombieCollision(bullet, zombie)
     p1:removeBullet(bullet:getUserData())
 end
 
-function handlePlayerZombieCollision(player, zombie)
+function handlePlayerZombieCollision(player, zombie, coll)
     local damage = 10
-    local isDead = p1:wasHit(damage)
+    local isDead = p1:wasHit(damage, coll)
     if isDead then
         print ("DEAD")
     end
@@ -122,9 +122,9 @@ end
 function preSolve(a, b, coll)
     -- Player x Zombie collision handling
     if (a:getCategory() == Config.ZOMBIE_CATEGORY and b:getCategory() == Config.PLAYER_CATEGORY) then
-        handlePlayerZombieCollision(b, a)
+        handlePlayerZombieCollision(b, a, coll)
     elseif (a:getCategory() == Config.PLAYER_CATEGORY and b:getCategory() == Config.ZOMBIE_CATEGORY) then
-        handlePlayerZombieCollision(a, b)
+        handlePlayerZombieCollision(a, b, coll)
     end
 end
  

@@ -34,15 +34,21 @@ function Player:updateScore(points)
     self.score = self.score + points
 end
 
-function Player:wasHit(damage)
+function Player:wasHit(damage, coll)
     if love.timer.getTime( ) - self.lastHit > self.hitInterval then
         self.lastHit = love.timer.getTime()
         self.health = self.health - damage
+        self:getPushedBack(coll)
         if self.health <= 0 then
             return true
         end
     end
     return false
+end
+
+function Player:getPushedBack(coll)
+    local x, y = coll:getNormal()
+    self.body:setLinearVelocity(-x * self.speed/2, -y * self.speed /2)
 end
 
 
@@ -73,7 +79,7 @@ function Player:update(dt)
         self.body:setLinearVelocity(0, self.speed)
     else
         local vx, vy = self.body:getLinearVelocity()
-        self.body:setLinearVelocity(vx * 0.9, vx * 0.9)
+        self.body:setLinearVelocity(vx * 0.9, vy * 0.9)
     end
     
     if love.keyboard.isDown(Config.KEYS.SHOOT) then
