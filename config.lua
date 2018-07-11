@@ -12,6 +12,29 @@ c.REGULAR_BULLET_DAMAGE = 10
 c.REGULAR_BULLET_SIZE = {25, 25}
 c.REGULAR_BULLET_COLOR = {255, 255, 255, 255}
 
+c.WEAPONS = {}
+c.WEAPONS[1] = {
+    speed = 1000,
+    damage = 10,
+    size = {25, 25},
+    color = {255, 255, 255, 255},
+    name = "Rocket"
+}
+c.WEAPONS[2] = {
+    speed = 2000,
+    damage = 10,
+    size = {10, 10},
+    color = {0, 0, 0, 255},
+    name = "Pistol"
+}
+c.WEAPONS[3] = {
+    speed = 500,
+    damage = 100,
+    size = {100, 100},
+    color = {30, 100, 200, 255},
+    name = "Genki Dama"
+}
+
 -- Zombie
 c.ZOMBIE_SIZE = {40, 40}
 c.ZOMBIE_FULL_LIFE_COLOR = {138, 43, 226}

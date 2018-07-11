@@ -9,7 +9,8 @@ function love.load()
     require 'entities.zombie'
 
     love.window.setFullscreen(true, "desktop")
-    love.graphics.setFont(love.graphics.newFont(32))
+    bigFont = love.graphics.newFont(32)
+    smallFont = love.graphics.newFont(22)
 
     screenWidth, screenHeight = love.graphics.getDimensions()
 
@@ -68,8 +69,11 @@ function love.draw()
     love.graphics.pop()
 
     love.graphics.setColor(255, 255, 255, 255)
+    love.graphics.setFont(bigFont)
     love.graphics.print("Score:"..p1.score, 20, 20)
     love.graphics.print("Health:"..p1.health, screenWidth - 200, 20)
+    love.graphics.setFont(smallFont)
+    love.graphics.print("Current weapon:"..p1:getWeapon().name, screenWidth - 340, screenHeight - 50)
 end
 
 function love.keyreleased(key)

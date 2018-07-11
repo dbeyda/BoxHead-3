@@ -6,6 +6,8 @@ require "entities.projectile"
 Player = Object:extend()
 
 function Player:new(x, y)
+    self.weapons = Config.WEAPONS
+    self.currentWeaponIndex = 2
     self.score = 0
     self.lastHit = love.timer.getTime()
     self.hitInterval = Config.PLAYER_HIT_INTERVAL
@@ -14,8 +16,6 @@ function Player:new(x, y)
     self.lastShot = love.timer.getTime( )
     self.health = Config.PLAYER_HEALTH
     self.shootingInterval = Config.PLAYER_SHOOTING_INTERVAL
-    self.currentWeapon = 0
-    self.weaponList = {}
     self.width, self.height = unpack(Config.PLAYER_SIZE)
     self.speed = Config.PLAYER_SPEED
     self.diagonalSpeed = math.sqrt(math.pow(self.speed, 2)/2)
@@ -85,7 +85,7 @@ function Player:update(dt)
     if love.keyboard.isDown(Config.KEYS.SHOOT) then
         if love.timer.getTime( ) - self.lastShot > self.shootingInterval then
             self.lastShot = love.timer.getTime()
-            local b = Bullet(self.body:getX(), self.body:getY(), self.direction)
+            local b = Bullet(self.body:getX(), self.body:getY(), self.direction, self:getWeapon())
             self.bulletCount = self.bulletCount + 1
             b.f:setUserData("bullet"..self.bulletCount)
             self.bullet["bullet"..self.bulletCount] = b
@@ -96,6 +96,18 @@ end
 function Player:keyreleased(key)
     if key == Config.KEYS.WALK_WEST or key == Config.KEYS.WALK_EAST or key == Config.KEYS.WALK_SOUTH or key == Config.KEYS.WALK_NORTH then
         self.body:setLinearVelocity(0,0)
+    elseif key == Config.KEYS.NEXT_WEAPON then
+        if self.currentWeaponIndex == #self.weapons then
+            self.currentWeaponIndex = 1
+        else
+            self.currentWeaponIndex = self.currentWeaponIndex + 1
+        end
+    elseif key == Config.KEYS.PREVIOUS_WEAPON then
+        if self.currentWeaponIndex == 1 then
+            self.currentWeaponIndex = #self.weapons
+        else
+            self.currentWeaponIndex = self.currentWeaponIndex - 1
+        end
     end
 end
 
@@ -120,7 +132,7 @@ function Player:getDirection()
 end
 
 function Player:getWeapon()
-    return self.currentWeapon
+    return self.weapons[self.currentWeaponIndex]
 end
 
 function Player:removeBullet(b)

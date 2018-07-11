@@ -3,13 +3,14 @@
 Config = require "config"
 Bullet = Object:extend()
 
-function Bullet:new(x, y, direction)
-    
-    self.speed = Config.REGULAR_BULLET_SPEED
-    self.damage = Config.REGULAR_BULLET_DAMAGE
+function Bullet:new(x, y, direction, bulletConfig)
+        
+    self.color = bulletConfig.color
+    self.speed = bulletConfig.speed
+    self.damage = bulletConfig.damage
 
     self.body = love.physics.newBody(world, x, y, "dynamic")
-    self.s = love.physics.newRectangleShape(unpack(Config.REGULAR_BULLET_SIZE))
+    self.s = love.physics.newRectangleShape(unpack(bulletConfig.size))
     self.f = love.physics.newFixture(self.body, self.s)          -- connect body to shape
     self.body:setFixedRotation(true)
     self.f:setCategory(Config.BULLET_CATEGORY)
@@ -35,7 +36,7 @@ function Bullet:new(x, y, direction)
 end
 
 function Bullet:draw()
-    love.graphics.setColor(unpack(Config.REGULAR_BULLET_COLOR))
+    love.graphics.setColor(unpack(self.color))
     love.graphics.polygon("fill", self.body:getWorldPoints(self.s:getPoints()))
 end
     
